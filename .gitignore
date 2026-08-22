@@ -1,0 +1,8 @@
+generated/*
+!generated/.gitkeep
+output/*
+!output/.gitkeep
+data/users.existing.csv
+*.log
+.DS_Store
+Thumbs.db
