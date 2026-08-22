@@ -1,0 +1,15 @@
+flowchart TB
+    CSV["users.csv"] --> LeadUser["DevOps Lead user"]
+    CSV --> DevAUser["Developer A user"]
+    CSV --> DevBUser["Developer B user"]
+
+    PowerRole["Custom VM Power Operator"] --> LeadUser
+    PowerRole --> DevAUser
+    PowerRole --> DevBUser
+
+    LeadUser --> AllRG["Shared RG + svi developer RG-ovi"]
+    DevAUser --> DevARG["Samo developer A RG"]
+    DevBUser --> DevBRG["Samo developer B RG"]
+
+    WorkloadMI["Managed Identity po developeru"] --> BlobRole["Blob Data Contributor - container scope"]
+    WorkloadMI --> FileRole["SMB MI Admin - dedicated file account"]

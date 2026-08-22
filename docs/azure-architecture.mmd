@@ -1,0 +1,34 @@
+flowchart TB
+    User["Administrator / developer"] -->|"SSH 22"| PIP["Jedini public IP"]
+    PIP --> Jump["Jump Host + Linux NVA"]
+
+    subgraph Hub["Switzerland North - shared hub"]
+        Jump
+        Lead["DevOps Lead VM"]
+        Jump --> Lead
+    end
+
+    subgraph DevA["France Central - Developer A"]
+        LBA["Internal Standard LB"] --> AppA1["Moodle app1 B2s"]
+        LBA --> AppA2["Moodle app2 B2s"]
+        AppA1 --> DBA["MariaDB A1_v2"]
+        AppA2 --> DBA
+        AppA1 --> StoreA["Blob + Azure Files"]
+        AppA2 --> StoreA
+    end
+
+    subgraph DevB["Norway East - Developer B"]
+        LBB["Internal Standard LB"] --> AppB1["Moodle app1 B2s"]
+        LBB --> AppB2["Moodle app2 B2s"]
+        AppB1 --> DBB["MariaDB A1_v2"]
+        AppB2 --> DBB
+        AppB1 --> StoreB["Blob + Azure Files"]
+        AppB2 --> StoreB
+    end
+
+    Jump --> LBA
+    Jump --> LBB
+    Lead --> AppA1
+    Lead --> AppB1
+    AppA1 -. "UDR + SNAT" .-> Jump
+    AppB1 -. "UDR + SNAT" .-> Jump
